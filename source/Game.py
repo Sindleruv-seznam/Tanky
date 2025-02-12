@@ -107,10 +107,8 @@ while True:
         text3_rect = text3.get_rect(center=button3.center)
         okno.blit(text3, text3_rect)
 
-    menu()
-    if b_active[0] or b_active[1] or b_active[2] == True:
-        pygame.quit()
-        sys.exit()
+    if b_active[0] == False and b_active[1] == False and b_active[2] == False:
+        menu()
     
     pygame.display.update() # prehozeni framebufferu na displej
 
