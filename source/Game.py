@@ -1,4 +1,5 @@
 # pouzite balicky 
+import os
 import sys 
 import math 
 import random
@@ -6,26 +7,36 @@ import pygame # pridani balicku (frameworku) Pygame
 pygame.init() # priprava frameowrku k praci 
  
 # PRIPRAVA APLIKACE 
- 
+
+velikost_x = 200
+velikost_y = 50
+
 ROZLISENI_OKNA_X = 800 
 ROZLISENI_OKNA_Y = 600 
  
 okno = pygame.display.set_mode((ROZLISENI_OKNA_X, ROZLISENI_OKNA_Y)) # vytvoreni okna pro vykreslovani 
 pygame.display.set_caption('Tanky') 
  
-casovac_FPS = pygame.time.Clock() 
+casovac_FPS = pygame.time.Clock()
+
+#priprava textur
+
+#nacteni obrazku
+aktualni_dir = os.path.dirname(__file__)
+obrazek_cesta = os.path.join(aktualni_dir, 'textures', 'red_tank.png')
+tank_r_small = pygame.image.load(obrazek_cesta)
+
+#velikost obrazku
+tank_r_x, tank_r_y = tank_r_small.get_size()
+tank_r = pygame.transform.scale(tank_r_small, (tank_r_x * 3, tank_r_y * 3))
  
 # priprava promennych 
-velikost_x = 200 
-velikost_y = 50 
 
-stred_obrazovky = (ROZLISENI_OKNA_X//2), (ROZLISENI_OKNA_Y//2)
+stred_obrazovky = (ROZLISENI_OKNA_X//2, ROZLISENI_OKNA_Y//2)
+stred_obrazovky_b = (ROZLISENI_OKNA_X//2 - velikost_x//2), (ROZLISENI_OKNA_Y//2 - velikost_y//2)
 
-poloha_x = stred_obrazovky[0] 
-poloha_y = stred_obrazovky[1] 
- 
-rychlost = 5 # pixely / frame 
-uhel = 30    # uhel pohybu ve stupnich 
+poloha_x = stred_obrazovky_b[0] 
+poloha_y = stred_obrazovky_b[1] 
 
 font = pygame.font.Font(None, 32) 
 
@@ -36,6 +47,10 @@ blue = (0, 0, 255)
 
 b_barva = [blue, blue, blue]
 b_active = [False, False, False]
+
+tank_r_rychlost = 0
+tank_r_poloha_x = stred_obrazovky[0] - tank_r_x//2
+tank_r_poloha_y = stred_obrazovky[1] - tank_r_y//2
 
 # vykreslovaci smycka 
 while True: 
@@ -109,6 +124,25 @@ while True:
 
     if b_active[0] == False and b_active[1] == False and b_active[2] == False:
         menu()
+    
+    #Tank
+    if b_active[0] == True or b_active[1] == True or b_active[2] == True:
+        okno.blit(tank_r, (tank_r_poloha_x, tank_r_poloha_y))
+
+    #pohyb
+    if stisknute_klavesy[pygame.K_UP]:
+        tank_r_rychlost = 2
+        tank_r_poloha_y = tank_r_poloha_y - tank_r_rychlost
+    else:
+        tank_r_rychlost = 0
+        tank_r_poloha_y = tank_r_poloha_y - tank_r_rychlost
+
+    if stisknute_klavesy[pygame.K_DOWN]:
+        tank_r_rychlost = -2
+        tank_r_poloha_y = tank_r_poloha_y - tank_r_rychlost
+    else:
+        tank_r_rychlost = 0
+        tank_r_poloha_y = tank_r_poloha_y - tank_r_rychlost
     
     pygame.display.update() # prehozeni framebufferu na displej
 
