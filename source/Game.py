@@ -19,7 +19,7 @@ casovac_FPS = pygame.time.Clock()
 velikost_x = 200 
 velikost_y = 50 
 
-stred_obrazovky = (ROZLISENI_OKNA_X//2) - velikost_x//2, (ROZLISENI_OKNA_Y//2) - velikost_y//2 
+stred_obrazovky = (ROZLISENI_OKNA_X//2), (ROZLISENI_OKNA_Y//2)
 
 poloha_x = stred_obrazovky[0] 
 poloha_y = stred_obrazovky[1] 
