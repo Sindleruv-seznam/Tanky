@@ -11,8 +11,8 @@ pygame.init() # priprava frameowrku k praci
 velikost_x = 200
 velikost_y = 50
 
-ROZLISENI_OKNA_X = 800
-ROZLISENI_OKNA_Y = 600 
+ROZLISENI_OKNA_X = 2560
+ROZLISENI_OKNA_Y = 1440
  
 okno = pygame.display.set_mode((ROZLISENI_OKNA_X, ROZLISENI_OKNA_Y)) # vytvoreni okna pro vykreslovani 
 pygame.display.set_caption('Tank trouble') 
@@ -71,6 +71,13 @@ while True:
         if udalost.type == pygame.QUIT: 
             pygame.quit() # vypnuti frameworku 
             sys.exit()    # vypnuti cele aplikace 
+            # detekce stisku klavesy Escape  
+        if udalost.type == pygame.KEYDOWN and b_active[0] == False and b_active[1] == False and b_active[2] == False :  
+            if udalost.key == pygame.K_ESCAPE:  
+                pygame.quit()  
+                sys.exit()  
+ 
+
     if stisknute_klavesy[pygame.K_ESCAPE]:
         b_active[0] = False 
         b_active[1] = False 
