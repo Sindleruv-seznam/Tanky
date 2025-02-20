@@ -49,10 +49,8 @@ b_barva = [blue, blue, blue]
 b_active = [False, False, False]
 
 tank_r_rychlost = 0
-tank_r_poloha_x = stred_obrazovky[0] - tank_r_x//2
-tank_r_poloha_y = stred_obrazovky[1] - tank_r_y//2
+tank_r_poloha = [stred_obrazovky[0] - tank_r_x//2, stred_obrazovky[1] - tank_r_y//2]
 
-# Nove promenne pro rotaci
 tank_r_uhel = 0
 tank_r_rotace_rychlost = 3
 
@@ -69,12 +67,10 @@ while True:
         if udalost.type == pygame.QUIT: 
             pygame.quit() # vypnuti frameworku 
             sys.exit()    # vypnuti cele aplikace 
-        # detekce stisku klavesy Escape 
-        if udalost.type == pygame.KEYDOWN: 
-            if udalost.key == pygame.K_ESCAPE: 
-                pygame.quit() 
-                sys.exit() 
-
+    if stisknute_klavesy[pygame.K_ESCAPE]:
+        b_active[0] = False 
+        b_active[1] = False 
+        b_active[2] = False
     # VYKRESLOVANI APLIKACE 
      
     okno.fill((white)) # prebarveni okna jednolitou barvou 
@@ -140,24 +136,24 @@ while True:
         # Vytvoreni rotovaneho obrazku
         rotovany_tank = pygame.transform.rotate(tank_r, tank_r_uhel)
         # Ziskani noveho obdelniku pro rotovany obrazek
-        tank_rect = rotovany_tank.get_rect(center=(tank_r_poloha_x + tank_r_x//2, tank_r_poloha_y + tank_r_y//2))
+        tank_rect = rotovany_tank.get_rect(center=(tank_r_poloha[0] + tank_r_x//2, tank_r_poloha[1] + tank_r_y//2))
         # Vykresleni rotovaneho tanku
         okno.blit(rotovany_tank, tank_rect.topleft)
 
     #pohyb
     if stisknute_klavesy[pygame.K_UP]:
         tank_r_rychlost = 2
-        tank_r_poloha_y = tank_r_poloha_y - tank_r_rychlost
+        tank_r_poloha[1] = tank_r_poloha[1] - tank_r_rychlost
     else:
         tank_r_rychlost = 0
-        tank_r_poloha_y = tank_r_poloha_y - tank_r_rychlost
+        tank_r_poloha[1] = tank_r_poloha[1] - tank_r_rychlost
 
     if stisknute_klavesy[pygame.K_DOWN]:
         tank_r_rychlost = -2
-        tank_r_poloha_y = tank_r_poloha_y - tank_r_rychlost
+        tank_r_poloha[1] = tank_r_poloha[1] - tank_r_rychlost
     else:
         tank_r_rychlost = 0
-        tank_r_poloha_y = tank_r_poloha_y - tank_r_rychlost
+        tank_r_poloha[1] = tank_r_poloha[1] - tank_r_rychlost
     
     pygame.display.update() # prehozeni framebufferu na displej
 
