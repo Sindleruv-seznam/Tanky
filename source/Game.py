@@ -11,8 +11,8 @@ pygame.init() # priprava frameowrku k praci
 velikost_x = 200
 velikost_y = 50
 
-ROZLISENI_OKNA_X = 800 
-ROZLISENI_OKNA_Y = 600 
+ROZLISENI_OKNA_X = 1600 
+ROZLISENI_OKNA_Y = 900 
  
 okno = pygame.display.set_mode((ROZLISENI_OKNA_X, ROZLISENI_OKNA_Y)) # vytvoreni okna pro vykreslovani 
 pygame.display.set_caption('Tanky') 
@@ -28,7 +28,9 @@ tank_r_small = pygame.image.load(obrazek_cesta).convert_alpha()
 
 #velikost obrazku
 tank_r_x, tank_r_y = tank_r_small.get_size()
-tank_r = pygame.transform.scale(tank_r_small, (tank_r_x * 3, tank_r_y * 3))
+tank_r_x = tank_r_x * 2.5
+tank_r_y = tank_r_y * 2.5
+tank_r = pygame.transform.scale(tank_r_small, (tank_r_x, tank_r_y))
  
 # priprava promennych 
 
@@ -51,7 +53,7 @@ b_active = [False, False, False]
 tank_r_rychlost = 0
 tank_r_poloha = [stred_obrazovky[0] - tank_r_x//2, stred_obrazovky[1] - tank_r_y//2]
 
-tank_r_uhel = 0
+tank_r_uhel = 90
 tank_r_rotace_rychlost = 3
 
 # vykreslovaci smycka 
@@ -142,19 +144,30 @@ while True:
 
     #pohyb
     if stisknute_klavesy[pygame.K_UP]:
-        tank_r_rychlost = 2
-        tank_r_poloha[1] = tank_r_poloha[1] - tank_r_rychlost
+        tank_r_rychlost = 3
+        tank_r_poloha[0] += math.cos(math.radians(tank_r_uhel)) * tank_r_rychlost
+        tank_r_poloha[1] -= math.sin(math.radians(tank_r_uhel)) * tank_r_rychlost
     else:
         tank_r_rychlost = 0
         tank_r_poloha[1] = tank_r_poloha[1] - tank_r_rychlost
 
     if stisknute_klavesy[pygame.K_DOWN]:
-        tank_r_rychlost = -2
-        tank_r_poloha[1] = tank_r_poloha[1] - tank_r_rychlost
+        tank_r_rychlost = 2
+        tank_r_poloha[0] -= math.cos(math.radians(tank_r_uhel)) * tank_r_rychlost
+        tank_r_poloha[1] += math.sin(math.radians(tank_r_uhel)) * tank_r_rychlost
     else:
         tank_r_rychlost = 0
         tank_r_poloha[1] = tank_r_poloha[1] - tank_r_rychlost
     
+    #kolize s hranou okna
+    if tank_r_poloha[0] > ROZLISENI_OKNA_X - tank_r_x:
+        tank_r_poloha[0] = ROZLISENI_OKNA_X - tank_r_x
+    if tank_r_poloha[0] < 0:
+        tank_r_poloha[0] = 0
+    if tank_r_poloha[1] > ROZLISENI_OKNA_Y - tank_r_y:
+        tank_r_poloha[1] = ROZLISENI_OKNA_Y - tank_r_y
+    if tank_r_poloha[1] < 0:
+        tank_r_poloha[1] = 0
     pygame.display.update() # prehozeni framebufferu na displej
 
     casovac_FPS.tick(60) # omezeni FPS
