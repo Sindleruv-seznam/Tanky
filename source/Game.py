@@ -11,11 +11,11 @@ pygame.init() # priprava frameowrku k praci
 velikost_x = 200
 velikost_y = 50
 
-ROZLISENI_OKNA_X = 1600 
-ROZLISENI_OKNA_Y = 900 
+ROZLISENI_OKNA_X = 800
+ROZLISENI_OKNA_Y = 600 
  
 okno = pygame.display.set_mode((ROZLISENI_OKNA_X, ROZLISENI_OKNA_Y)) # vytvoreni okna pro vykreslovani 
-pygame.display.set_caption('Tanky') 
+pygame.display.set_caption('Tank trouble') 
  
 casovac_FPS = pygame.time.Clock()
 
@@ -23,13 +23,15 @@ casovac_FPS = pygame.time.Clock()
 
 #nacteni obrazku
 aktualni_dir = os.path.dirname(__file__)
-obrazek_cesta = os.path.join(aktualni_dir, 'textures', 'red_tank.png')
-tank_r_small = pygame.image.load(obrazek_cesta).convert_alpha()
+obrazek_cesta_tank_r = os.path.join(aktualni_dir, 'textures', 'red_tank.png')
+tank_r_small = pygame.image.load(obrazek_cesta_tank_r).convert_alpha()
+obrazek_cesta_cannon_ball = os.path.join(aktualni_dir, 'textures', 'canon_shot.png')
+cannon_ball = pygame.image.load(obrazek_cesta_cannon_ball).convert_alpha()
 
 #velikost obrazku
 tank_r_x, tank_r_y = tank_r_small.get_size()
-tank_r_x = tank_r_x * 2.5
-tank_r_y = tank_r_y * 2.5
+tank_r_x = tank_r_x * 2
+tank_r_y = tank_r_y * 2
 tank_r = pygame.transform.scale(tank_r_small, (tank_r_x, tank_r_y))
  
 # priprava promennych 
@@ -159,6 +161,11 @@ while True:
         tank_r_rychlost = 0
         tank_r_poloha[1] = tank_r_poloha[1] - tank_r_rychlost
     
+    #strelba
+    if stisknute_klavesy[pygame.K_SPACE]:
+        okno.blit(cannon_ball, (tank_r_poloha[0], tank_r_poloha[1]))
+
+
     #kolize s hranou okna
     if tank_r_poloha[0] > ROZLISENI_OKNA_X - tank_r_x:
         tank_r_poloha[0] = ROZLISENI_OKNA_X - tank_r_x
