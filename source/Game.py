@@ -24,7 +24,7 @@ casovac_FPS = pygame.time.Clock()
 #nacteni obrazku
 aktualni_dir = os.path.dirname(__file__)
 obrazek_cesta = os.path.join(aktualni_dir, 'textures', 'red_tank.png')
-tank_r_small = pygame.image.load(obrazek_cesta)
+tank_r_small = pygame.image.load(obrazek_cesta).convert_alpha()
 
 #velikost obrazku
 tank_r_x, tank_r_y = tank_r_small.get_size()
@@ -51,6 +51,10 @@ b_active = [False, False, False]
 tank_r_rychlost = 0
 tank_r_poloha_x = stred_obrazovky[0] - tank_r_x//2
 tank_r_poloha_y = stred_obrazovky[1] - tank_r_y//2
+
+# Nove promenne pro rotaci
+tank_r_uhel = 0
+tank_r_rotace_rychlost = 3
 
 # vykreslovaci smycka 
 while True: 
@@ -127,7 +131,18 @@ while True:
     
     #Tank
     if b_active[0] == True or b_active[1] == True or b_active[2] == True:
-        okno.blit(tank_r, (tank_r_poloha_x, tank_r_poloha_y))
+        # Rotace tanku
+        if stisknute_klavesy[pygame.K_LEFT]:
+            tank_r_uhel = (tank_r_uhel + tank_r_rotace_rychlost) % 360
+        if stisknute_klavesy[pygame.K_RIGHT]:
+            tank_r_uhel = (tank_r_uhel - tank_r_rotace_rychlost) % 360
+            
+        # Vytvoreni rotovaneho obrazku
+        rotovany_tank = pygame.transform.rotate(tank_r, tank_r_uhel)
+        # Ziskani noveho obdelniku pro rotovany obrazek
+        tank_rect = rotovany_tank.get_rect(center=(tank_r_poloha_x + tank_r_x//2, tank_r_poloha_y + tank_r_y//2))
+        # Vykresleni rotovaneho tanku
+        okno.blit(rotovany_tank, tank_rect.topleft)
 
     #pohyb
     if stisknute_klavesy[pygame.K_UP]:
@@ -146,4 +161,4 @@ while True:
     
     pygame.display.update() # prehozeni framebufferu na displej
 
-    casovac_FPS.tick(60) # omezeni FPS 
+    casovac_FPS.tick(60) # omezeni FPS
