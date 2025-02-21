@@ -3,6 +3,7 @@ import os
 import sys 
 import math 
 import random
+import copy
 import pygame # pridani balicku (frameworku) Pygame 
 pygame.init() # priprava frameowrku k praci 
  
@@ -33,7 +34,7 @@ tank_r_x, tank_r_y = tank_r_small.get_size()
 tank_r_x = tank_r_x * 2
 tank_r_y = tank_r_y * 2
 tank_r = pygame.transform.scale(tank_r_small, (tank_r_x, tank_r_y))
- 
+strela_r_x, strela_r_y = cannon_ball.get_size()
 # priprava promennych 
 
 stred_obrazovky = (ROZLISENI_OKNA_X//2, ROZLISENI_OKNA_Y//2)
@@ -57,6 +58,11 @@ tank_r_poloha = [stred_obrazovky[0] - tank_r_x//2, stred_obrazovky[1] - tank_r_y
 
 tank_r_uhel = 90
 tank_r_rotace_rychlost = 3
+
+strela_r_rychlost = 5
+strela_r_poloha = [tank_r_poloha[0], tank_r_poloha[1]]
+strela_r_1 = False
+strela_r_1_duration = 0
 
 # vykreslovaci smycka 
 while True: 
@@ -82,6 +88,14 @@ while True:
         b_active[0] = False 
         b_active[1] = False 
         b_active[2] = False
+        tank_r_poloha[0] = (stred_obrazovky[0] - tank_r_x//2)
+        tank_r_poloha[1] = (stred_obrazovky[1] - tank_r_y//2)
+        tank_r_uhel = 90
+        strela_r_poloha[0] = (tank_r_poloha[0] + tank_r_x//2)
+        strela_r_poloha[1] = (tank_r_poloha[1] + tank_r_y//2)
+        strela_r_1 = False
+
+
     # VYKRESLOVANI APLIKACE 
      
     okno.fill((white)) # prebarveni okna jednolitou barvou 
@@ -169,9 +183,33 @@ while True:
         tank_r_poloha[1] = tank_r_poloha[1] - tank_r_rychlost
     
     #strelba
-    if stisknute_klavesy[pygame.K_SPACE]:
-        okno.blit(cannon_ball, (tank_r_poloha[0], tank_r_poloha[1]))
+    if stisknute_klavesy[pygame.K_SPACE] and strela_r_1 == False and (b_active[0] == True or b_active[1] == True or b_active[2] == True):
+        strela_r_1 = True
+        strela_r_1_duration = 0
+        strela_r_uhel = copy.copy(tank_r_uhel)
+        strela_r_poloha[0] = (tank_r_poloha[0] + tank_r_x//2) - strela_r_x//2
+        strela_r_poloha[1] = (tank_r_poloha[1] + tank_r_y//2) - strela_r_y//2
 
+    if stisknute_klavesy[pygame.K_SPACE] and strela_r_1 == False and (b_active[0] == True or b_active[1] == True or b_active[2] == True):
+        strela_r_1 = True
+        strela_r_uhel = copy.copy(tank_r_uhel)
+
+    if strela_r_1_duration == 600:
+        strela_r_1 = False
+    elif strela_r_1 == True and (b_active[0] == True or b_active[1] == True or b_active[2] == True):
+        okno.blit(cannon_ball, (strela_r_poloha[0], strela_r_poloha[1]))
+        strela_r_poloha[0] += math.cos(math.radians(strela_r_uhel)) * strela_r_rychlost
+        strela_r_poloha[1] -= math.sin(math.radians(strela_r_uhel)) * strela_r_rychlost
+        strela_r_1_duration += 1
+    
+    if strela_r_poloha[0] > ROZLISENI_OKNA_X - strela_r_x:
+        strela_r_uhel = (180 - strela_r_uhel) % 360
+    if strela_r_poloha[0] < 0:
+        strela_r_uhel = (180 - strela_r_uhel) % 360
+    if strela_r_poloha[1] > ROZLISENI_OKNA_Y - strela_r_y:
+        strela_r_uhel = (360 - strela_r_uhel) % 360
+    if strela_r_poloha[1] < 0:
+        strela_r_uhel = (360 - strela_r_uhel) % 360
 
     #kolize s hranou okna
     if tank_r_poloha[0] > ROZLISENI_OKNA_X - tank_r_x:
