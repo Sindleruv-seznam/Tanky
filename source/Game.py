@@ -150,6 +150,35 @@ while True:
     if b_active[0] == False and b_active[1] == False and b_active[2] == False:
         menu()
     
+#strelba
+    if stisknute_klavesy[pygame.K_SPACE] and strela_r_1 == False and (b_active[0] == True or b_active[1] == True or b_active[2] == True):
+        strela_r_1 = True
+        strela_r_1_duration = 0
+        strela_r_uhel = copy.copy(tank_r_uhel)
+        strela_r_poloha[0] = (tank_r_poloha[0] + tank_r_x//2) - strela_r_x//2
+        strela_r_poloha[1] = (tank_r_poloha[1] + tank_r_y//2) - strela_r_y//2
+
+    if stisknute_klavesy[pygame.K_SPACE] and strela_r_1 == False and (b_active[0] == True or b_active[1] == True or b_active[2] == True):
+        strela_r_1 = True
+        strela_r_uhel = copy.copy(tank_r_uhel)
+
+    if strela_r_1_duration == 600:
+        strela_r_1 = False
+    elif strela_r_1 == True and (b_active[0] == True or b_active[1] == True or b_active[2] == True):
+        okno.blit(cannon_ball, (strela_r_poloha[0], strela_r_poloha[1]))
+        strela_r_poloha[0] += math.cos(math.radians(strela_r_uhel)) * strela_r_rychlost
+        strela_r_poloha[1] -= math.sin(math.radians(strela_r_uhel)) * strela_r_rychlost
+        strela_r_1_duration += 1
+    
+    if strela_r_poloha[0] > ROZLISENI_OKNA_X - strela_r_x:
+        strela_r_uhel = (180 - strela_r_uhel) % 360
+    if strela_r_poloha[0] < 0:
+        strela_r_uhel = (180 - strela_r_uhel) % 360
+    if strela_r_poloha[1] > ROZLISENI_OKNA_Y - strela_r_y:
+        strela_r_uhel = (360 - strela_r_uhel) % 360
+    if strela_r_poloha[1] < 0:
+        strela_r_uhel = (360 - strela_r_uhel) % 360
+        
     #Tank
     if b_active[0] == True or b_active[1] == True or b_active[2] == True:
         # Rotace tanku
@@ -181,35 +210,6 @@ while True:
     else:
         tank_r_rychlost = 0
         tank_r_poloha[1] = tank_r_poloha[1] - tank_r_rychlost
-    
-    #strelba
-    if stisknute_klavesy[pygame.K_SPACE] and strela_r_1 == False and (b_active[0] == True or b_active[1] == True or b_active[2] == True):
-        strela_r_1 = True
-        strela_r_1_duration = 0
-        strela_r_uhel = copy.copy(tank_r_uhel)
-        strela_r_poloha[0] = (tank_r_poloha[0] + tank_r_x//2) - strela_r_x//2
-        strela_r_poloha[1] = (tank_r_poloha[1] + tank_r_y//2) - strela_r_y//2
-
-    if stisknute_klavesy[pygame.K_SPACE] and strela_r_1 == False and (b_active[0] == True or b_active[1] == True or b_active[2] == True):
-        strela_r_1 = True
-        strela_r_uhel = copy.copy(tank_r_uhel)
-
-    if strela_r_1_duration == 600:
-        strela_r_1 = False
-    elif strela_r_1 == True and (b_active[0] == True or b_active[1] == True or b_active[2] == True):
-        okno.blit(cannon_ball, (strela_r_poloha[0], strela_r_poloha[1]))
-        strela_r_poloha[0] += math.cos(math.radians(strela_r_uhel)) * strela_r_rychlost
-        strela_r_poloha[1] -= math.sin(math.radians(strela_r_uhel)) * strela_r_rychlost
-        strela_r_1_duration += 1
-    
-    if strela_r_poloha[0] > ROZLISENI_OKNA_X - strela_r_x:
-        strela_r_uhel = (180 - strela_r_uhel) % 360
-    if strela_r_poloha[0] < 0:
-        strela_r_uhel = (180 - strela_r_uhel) % 360
-    if strela_r_poloha[1] > ROZLISENI_OKNA_Y - strela_r_y:
-        strela_r_uhel = (360 - strela_r_uhel) % 360
-    if strela_r_poloha[1] < 0:
-        strela_r_uhel = (360 - strela_r_uhel) % 360
 
     #kolize s hranou okna
     if tank_r_poloha[0] > ROZLISENI_OKNA_X - tank_r_x:
