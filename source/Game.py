@@ -95,7 +95,6 @@ while True:
         strela_r_poloha[1] = (tank_r_poloha[1] + tank_r_y//2)
         strela_r_1 = False
 
-
     # VYKRESLOVANI APLIKACE 
      
     okno.fill((white)) # prebarveni okna jednolitou barvou 
@@ -155,16 +154,36 @@ while True:
         strela_r_1 = True
         strela_r_1_duration = 0
         strela_r_uhel = copy.copy(tank_r_uhel)
-        strela_r_poloha[0] = (tank_r_poloha[0] + tank_r_x//2) - strela_r_x//2
-        strela_r_poloha[1] = (tank_r_poloha[1] + tank_r_y//2) - strela_r_y//2
+        spawn_distance = tank_r_x//2 + 5
+        strela_r_poloha[0] = (tank_r_poloha[0] + tank_r_x//2) + math.cos(math.radians(tank_r_uhel)) * spawn_distance - strela_r_x//2
+        strela_r_poloha[1] = (tank_r_poloha[1] + tank_r_y//2) - math.sin(math.radians(tank_r_uhel)) * spawn_distance - strela_r_y//2
+
 
     if stisknute_klavesy[pygame.K_SPACE] and strela_r_1 == False and (b_active[0] == True or b_active[1] == True or b_active[2] == True):
         strela_r_1 = True
         strela_r_uhel = copy.copy(tank_r_uhel)
 
-    if strela_r_1_duration == 600:
+    if strela_r_1_duration == 200:
         strela_r_1 = False
     elif strela_r_1 == True and (b_active[0] == True or b_active[1] == True or b_active[2] == True):
+        # Create only cannonball hitbox - use existing tank_rect
+        cannonball_rect = pygame.Rect(strela_r_poloha[0], strela_r_poloha[1], strela_r_x, strela_r_y)
+        
+        # Draw and rotate tank first to get its hitbox
+        rotovany_tank = pygame.transform.rotate(tank_r, tank_r_uhel)
+        tank_rect = rotovany_tank.get_rect(center=(tank_r_poloha[0] + tank_r_x//2, tank_r_poloha[1] + tank_r_y//2))
+        okno.blit(rotovany_tank, tank_rect.topleft)
+        
+        # Check for collision using the tank's actual rotated rectangle
+        if cannonball_rect.colliderect(tank_rect) and strela_r_1_duration > 8:
+            # Reset game state
+            tank_r_poloha = [stred_obrazovky[0] - tank_r_x//2, stred_obrazovky[1] - tank_r_y//2]
+            tank_r_uhel = 90
+            strela_r_1 = False
+            b_active = [False, False, False]
+            continue
+
+        # Draw cannonball and update position
         okno.blit(cannon_ball, (strela_r_poloha[0], strela_r_poloha[1]))
         strela_r_poloha[0] += math.cos(math.radians(strela_r_uhel)) * strela_r_rychlost
         strela_r_poloha[1] -= math.sin(math.radians(strela_r_uhel)) * strela_r_rychlost
@@ -179,6 +198,7 @@ while True:
     if strela_r_poloha[1] < 0:
         strela_r_uhel = (360 - strela_r_uhel) % 360
         
+    
     #Tank
     if b_active[0] == True or b_active[1] == True or b_active[2] == True:
         # Rotace tanku
@@ -190,9 +210,9 @@ while True:
         # Vytvoreni rotovaneho obrazku
         rotovany_tank = pygame.transform.rotate(tank_r, tank_r_uhel)
         # Ziskani noveho obdelniku pro rotovany obrazek
-        tank_rect = rotovany_tank.get_rect(center=(tank_r_poloha[0] + tank_r_x//2, tank_r_poloha[1] + tank_r_y//2))
+        tank_r_rect = rotovany_tank.get_rect(center=(tank_r_poloha[0] + tank_r_x//2, tank_r_poloha[1] + tank_r_y//2))
         # Vykresleni rotovaneho tanku
-        okno.blit(rotovany_tank, tank_rect.topleft)
+        okno.blit(rotovany_tank, tank_r_rect.topleft)
 
     #pohyb
     if stisknute_klavesy[pygame.K_UP]:
