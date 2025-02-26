@@ -12,8 +12,8 @@ pygame.init() # priprava frameowrku k praci
 velikost_x = 200
 velikost_y = 50
 
-ROZLISENI_OKNA_X = 2560
-ROZLISENI_OKNA_Y = 1440
+ROZLISENI_OKNA_X = 1600
+ROZLISENI_OKNA_Y = 900
  
 okno = pygame.display.set_mode((ROZLISENI_OKNA_X, ROZLISENI_OKNA_Y)) # vytvoreni okna pro vykreslovani 
 pygame.display.set_caption('Tank trouble') 
