@@ -12,8 +12,8 @@ pygame.init() # priprava frameowrku k praci
 velikost_x = 200
 velikost_y = 50
 
-ROZLISENI_OKNA_X = 2560
-ROZLISENI_OKNA_Y = 1440
+ROZLISENI_OKNA_X = 1600
+ROZLISENI_OKNA_Y = 900
  
 okno = pygame.display.set_mode((ROZLISENI_OKNA_X, ROZLISENI_OKNA_Y)) # vytvoreni okna pro vykreslovani 
 pygame.display.set_caption('Tank trouble') 
@@ -58,6 +58,8 @@ tank_r_poloha = [stred_obrazovky[0] - tank_r_x//2, stred_obrazovky[1] - tank_r_y
 
 tank_r_uhel = 90
 tank_r_rotace_rychlost = 3
+rotovany_tank = pygame.transform.rotate(tank_r, tank_r_uhel)
+tank_rect = rotovany_tank.get_rect(center=(tank_r_poloha[0] + tank_r_x//2, tank_r_poloha[1] + tank_r_y//2))
 
 strela_r_rychlost = 5
 strela_r_poloha = [tank_r_poloha[0], tank_r_poloha[1]]
@@ -149,7 +151,7 @@ while True:
     if b_active[0] == False and b_active[1] == False and b_active[2] == False:
         menu()
     
-#strelba
+    #strelba
     if stisknute_klavesy[pygame.K_SPACE] and strela_r_1 == False and (b_active[0] == True or b_active[1] == True or b_active[2] == True):
         strela_r_1 = True
         strela_r_1_duration = 0
@@ -170,8 +172,6 @@ while True:
         cannonball_rect = pygame.Rect(strela_r_poloha[0], strela_r_poloha[1], strela_r_x, strela_r_y)
         
         # Draw and rotate tank first to get its hitbox
-        rotovany_tank = pygame.transform.rotate(tank_r, tank_r_uhel)
-        tank_rect = rotovany_tank.get_rect(center=(tank_r_poloha[0] + tank_r_x//2, tank_r_poloha[1] + tank_r_y//2))
         okno.blit(rotovany_tank, tank_rect.topleft)
         
         # Check for collision using the tank's actual rotated rectangle
@@ -231,15 +231,22 @@ while True:
         tank_r_rychlost = 0
         tank_r_poloha[1] = tank_r_poloha[1] - tank_r_rychlost
 
-    #kolize s hranou okna
-    if tank_r_poloha[0] > ROZLISENI_OKNA_X - tank_r_x:
-        tank_r_poloha[0] = ROZLISENI_OKNA_X - tank_r_x
-    if tank_r_poloha[0] < 0:
-        tank_r_poloha[0] = 0
-    if tank_r_poloha[1] > ROZLISENI_OKNA_Y - tank_r_y:
-        tank_r_poloha[1] = ROZLISENI_OKNA_Y - tank_r_y
-    if tank_r_poloha[1] < 0:
-        tank_r_poloha[1] = 0
+    # Replace the current collision code with this:
+    if b_active[0] == True or b_active[1] == True or b_active[2] == True:
+        # Create rotated tank image and get its rectangle
+        rotovany_tank = pygame.transform.rotate(tank_r, tank_r_uhel)
+        tank_rect = rotovany_tank.get_rect(center=(tank_r_poloha[0] + tank_r_x//2, tank_r_poloha[1] + tank_r_y//2))
+
+    # Keep tank inside screen bounds
+    if tank_rect.left < 0:
+        tank_r_poloha[0] -= tank_rect.left  # Move right
+    if tank_rect.right > ROZLISENI_OKNA_X:
+        tank_r_poloha[0] -= (tank_rect.right - ROZLISENI_OKNA_X)  # Move left
+    if tank_rect.top < 0:
+        tank_r_poloha[1] -= tank_rect.top  # Move down
+    if tank_rect.bottom > ROZLISENI_OKNA_Y:
+        tank_r_poloha[1] -= (tank_rect.bottom - ROZLISENI_OKNA_Y)  # Move up
+
     pygame.display.update() # prehozeni framebufferu na displej
 
     casovac_FPS.tick(60) # omezeni FPS
