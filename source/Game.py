@@ -183,7 +183,7 @@ while True:
         if button3.collidepoint(pozice_mysi) and LMB_active == True:
             b_active[2] = True
 
-        text3 = font.render("Bossfight???", True, grey)
+        text3 = font.render("Claustrophobia", True, grey)
         text3_rect = text3.get_rect(center=button3.center)
         okno.blit(text3, text3_rect)
 
@@ -191,7 +191,7 @@ while True:
         menu()
     
     # Strelba červeného tanku
-    if stisknute_klavesy[pygame.K_SPACE] and strela_r_1 == False and (b_active[0] == True or b_active[1] == True or b_active[2] == True):
+    if stisknute_klavesy[pygame.K_RCTRL] and strela_r_1 == False and (b_active[0] == True or b_active[1] == True or b_active[2] == True):
         strela_r_1 = True
         strela_r_1_duration = 0
         strela_r_uhel = copy.copy(tank_r_uhel)
@@ -200,7 +200,7 @@ while True:
         strela_r_poloha[1] = (tank_r_poloha[1] + tank_r_y//2) - math.sin(math.radians(tank_r_uhel)) * spawn_distance - strela_r_y//2
 
     # Strelba modrého tanku
-    if stisknute_klavesy[pygame.K_RETURN] and strela_b_1 == False and (b_active[0] == True or b_active[1] == True or b_active[2] == True):
+    if stisknute_klavesy[pygame.K_SPACE] and strela_b_1 == False and (b_active[0] == True or b_active[1] == True or b_active[2] == True):
         strela_b_1 = True
         strela_b_1_duration = 0
         strela_b_uhel = copy.copy(tank_b_uhel)
