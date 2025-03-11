@@ -58,8 +58,9 @@ tank_r_poloha = [stred_obrazovky[0] - tank_r_x//2, stred_obrazovky[1] - tank_r_y
 
 tank_r_uhel = 90
 tank_r_rotace_rychlost = 3
-rotovany_tank = pygame.transform.rotate(tank_r, tank_r_uhel)
-tank_rect = rotovany_tank.get_rect(center=(tank_r_poloha[0] + tank_r_x//2, tank_r_poloha[1] + tank_r_y//2))
+tank_r_rotovany = pygame.transform.rotate(tank_r, tank_r_uhel)
+tank_r_rect = tank_r_rotovany.get_rect(center=(tank_r_poloha[0] + tank_r_x//2, tank_r_poloha[1] + tank_r_y//2))
+tank_r_score = 0
 
 strela_r_rychlost = 5
 strela_r_poloha = [tank_r_poloha[0], tank_r_poloha[1]]
@@ -148,15 +149,24 @@ while True:
         text3_rect = text3.get_rect(center=button3.center)
         okno.blit(text3, text3_rect)
 
+
+
+    def tank_r_pvp_body():
+        text_pvp_tank_r = font.render(str(tank_r_score), True, red)
+        okno.blit(text_pvp_tank_r, (10, 10))
+
+
+
+
     if b_active[0] == False and b_active[1] == False and b_active[2] == False:
         menu()
     
 
 
-
     #Tank
     if b_active[0] == True or b_active[1] == True or b_active[2] == True:
-
+        tank_r_pvp_body()
+        
         # Rotace tanku
         if stisknute_klavesy[pygame.K_a]:
             tank_r_uhel = (tank_r_uhel + tank_r_rotace_rychlost) % 360
@@ -164,13 +174,13 @@ while True:
             tank_r_uhel = (tank_r_uhel - tank_r_rotace_rychlost) % 360
             
         # Vytvoreni rotovaneho obrazku
-        rotovany_tank = pygame.transform.rotate(tank_r, tank_r_uhel)
+        tank_r_rotovany = pygame.transform.rotate(tank_r, tank_r_uhel)
         
         # Ziskani noveho obdelniku pro rotovany obrazek
-        tank_r_rect = rotovany_tank.get_rect(center=(tank_r_poloha[0] + tank_r_x//2, tank_r_poloha[1] + tank_r_y//2))
+        tank_r_rect = tank_r_rotovany.get_rect(center=(tank_r_poloha[0] + tank_r_x//2, tank_r_poloha[1] + tank_r_y//2))
         
         # Vykresleni rotovaneho tanku
-        okno.blit(rotovany_tank, tank_r_rect.topleft)
+        okno.blit(tank_r_rotovany, tank_r_rect.topleft)
 
         #strelba
         if stisknute_klavesy[pygame.K_SPACE] and strela_r_1 == False and (b_active[0] == True or b_active[1] == True or b_active[2] == True):
@@ -190,14 +200,15 @@ while True:
         elif strela_r_1 == True and (b_active[0] == True or b_active[1] == True or b_active[2] == True):
             
             # Strela hitbox
-            cannonball_rect = pygame.Rect(strela_r_poloha[0], strela_r_poloha[1], strela_r_x, strela_r_y)
+            strela_r_rect = pygame.Rect(strela_r_poloha[0], strela_r_poloha[1], strela_r_x, strela_r_y)
 
             # Kontrola kolize se strelou
-            if cannonball_rect.colliderect(tank_rect) and strela_r_1_duration > 8:
+            if strela_r_rect.colliderect(tank_r_rect) and strela_r_1_duration > 8:
                 # Reset hry
                 tank_r_poloha = [(stred_obrazovky[0] - tank_r_x//2) + random.randint(-700, 700), (stred_obrazovky[1] - tank_r_y//2) + random.randint(-350, 350)]
-                tank_r_uhel = 90
+                tank_r_uhel = random.choice([90, 180, 270, 360])
                 strela_r_1 = False
+                tank_r_score -= 1
                 continue
 
             # Vykreselení strely a pozice
@@ -236,18 +247,18 @@ while True:
         if b_active[0] == True or b_active[1] == True or b_active[2] == True:
             
             # Create rotated tank image and get its rectangle
-            rotovany_tank = pygame.transform.rotate(tank_r, tank_r_uhel)
-            tank_rect = rotovany_tank.get_rect(center=(tank_r_poloha[0] + tank_r_x//2, tank_r_poloha[1] + tank_r_y//2))
+            tank_r_rotovany = pygame.transform.rotate(tank_r, tank_r_uhel)
+            tank_r_rect = tank_r_rotovany.get_rect(center=(tank_r_poloha[0] + tank_r_x//2, tank_r_poloha[1] + tank_r_y//2))
 
         # Keep tank inside screen bounds
-        if tank_rect.left < 0:
-            tank_r_poloha[0] -= tank_rect.left
-        if tank_rect.right > ROZLISENI_OKNA_X:
-            tank_r_poloha[0] -= (tank_rect.right - ROZLISENI_OKNA_X)
-        if tank_rect.top < 0:
-            tank_r_poloha[1] -= tank_rect.top
-        if tank_rect.bottom > ROZLISENI_OKNA_Y:
-            tank_r_poloha[1] -= (tank_rect.bottom - ROZLISENI_OKNA_Y)
+        if tank_r_rect.left < 0:
+            tank_r_poloha[0] -= tank_r_rect.left
+        if tank_r_rect.right > ROZLISENI_OKNA_X:
+            tank_r_poloha[0] -= (tank_r_rect.right - ROZLISENI_OKNA_X)
+        if tank_r_rect.top < 0:
+            tank_r_poloha[1] -= tank_r_rect.top
+        if tank_r_rect.bottom > ROZLISENI_OKNA_Y:
+            tank_r_poloha[1] -= (tank_r_rect.bottom - ROZLISENI_OKNA_Y)
 
     pygame.display.update() # prehozeni framebufferu na displej
 
