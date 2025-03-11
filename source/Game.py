@@ -195,10 +195,9 @@ while True:
             # Kontrola kolize se strelou
             if cannonball_rect.colliderect(tank_rect) and strela_r_1_duration > 8:
                 # Reset hry
-                tank_r_poloha = [stred_obrazovky[0] - tank_r_x//2, stred_obrazovky[1] - tank_r_y//2]
+                tank_r_poloha = [(stred_obrazovky[0] - tank_r_x//2) + random.randint(-700, 700), (stred_obrazovky[1] - tank_r_y//2) + random.randint(-350, 350)]
                 tank_r_uhel = 90
                 strela_r_1 = False
-                b_active = [False, False, False]
                 continue
 
             # Vykreselení strely a pozice
