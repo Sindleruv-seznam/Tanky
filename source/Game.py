@@ -124,7 +124,7 @@ while True:
         
         tank_b_poloha[0] = (stred_obrazovky[0] - tank_b_x//2) + 200
         tank_b_poloha[1] = (stred_obrazovky[1] - tank_b_y//2)
-        tank_b_uhel = 180
+        tank_b_uhel = 270
         strela_b_poloha[0] = (tank_b_poloha[0] + tank_b_x//2)
         strela_b_poloha[1] = (tank_b_poloha[1] + tank_b_y//2)
         strela_b_1 = False
