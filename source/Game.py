@@ -152,7 +152,7 @@ while True:
 
 
     def tank_r_pvp_body():
-        text_pvp_tank_r = font.render(str(tank_r_score), True, red)
+        text_pvp_tank_r = font.render("Red: " + str(tank_r_score), True, red)
         okno.blit(text_pvp_tank_r, (10, 10))
 
 
@@ -163,7 +163,7 @@ while True:
     
 
 
-    #Tank
+    #R_Tank
     if b_active[0] == True or b_active[1] == True or b_active[2] == True:
         tank_r_pvp_body()
         
