@@ -244,6 +244,8 @@ while True:
 
         if strela_r_1_duration == 200:
             strela_r_1 = False
+            strela_r_poloha[0] = -100
+            strela_r_poloha[1] = -100
         elif strela_r_1 == True and (b_active[0] == True or b_active[1] == True or b_active[2] == True):
 
             # Vykreselení strely a pozice
@@ -269,7 +271,6 @@ while True:
             tank_r_uhel = random.choice([90, 180, 270, 360])
             strela_r_1 = False
             tank_b_score += 1
-            continue
 
         # Bodovani 2
         if strela_b_rect.colliderect(tank_r_rect):
@@ -345,6 +346,8 @@ while True:
 
         if strela_b_1_duration == 200:
             strela_b_1 = False
+            strela_b_poloha[0] = -100
+            strela_b_poloha[1] = -100
         elif strela_b_1 == True and (b_active[0] == True or b_active[1] == True or b_active[2] == True):
 
             # Vykreselení strely a pozice
@@ -362,7 +365,21 @@ while True:
                 strela_b_uhel = (360 - strela_b_uhel) % 360
             if strela_b_poloha[1] < 0:
                 strela_b_uhel = (360 - strela_b_uhel) % 360
-             
+
+        if b_active[2] == True:
+            if strela_b_poloha[0] > ROZLISENI_OKNA_X - strela_b_x:
+                ROZLISENI_OKNA_X -= 16
+                strela_b_1 = False
+            if strela_b_poloha[0] < 0:
+                ROZLISENI_OKNA_X -= 16
+                strela_b_1 = False
+            if strela_b_poloha[1] > ROZLISENI_OKNA_Y - strela_b_y:
+                ROZLISENI_OKNA_Y -= 9
+                strela_b_1 = False
+            if strela_b_poloha[1] < 0:
+                ROZLISENI_OKNA_Y -= 9
+                strela_b_1 = False
+
         # Kontrola kolize se strelou
         if strela_b_rect.colliderect(tank_b_rect) and strela_b_1_duration > 8:
             # Bodovani
