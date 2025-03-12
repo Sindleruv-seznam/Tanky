@@ -84,11 +84,13 @@ strela_r_rychlost = 5
 strela_r_poloha = [tank_r_poloha[0], tank_r_poloha[1]]
 strela_r_1 = False
 strela_r_1_duration = 0
+global strela_r_rect
 
 strela_b_rychlost = 5
 strela_b_poloha = [tank_b_poloha[0], tank_b_poloha[1]]
 strela_b_1 = False
 strela_b_1_duration = 0
+global strela_b_rect
 
 # vykreslovaci smycka 
 while True: 
@@ -115,6 +117,7 @@ while True:
         b_active[1] = False 
         b_active[2] = False
 
+        tank_r_score = 0
         tank_r_poloha[0] = (stred_obrazovky[0] - tank_r_x//2) - 200
         tank_r_poloha[1] = (stred_obrazovky[1] - tank_r_y//2)
         tank_r_uhel = 90
@@ -122,6 +125,7 @@ while True:
         strela_r_poloha[1] = (tank_r_poloha[1] + tank_r_y//2)
         strela_r_1 = False
         
+        tank_b_score = 0
         tank_b_poloha[0] = (stred_obrazovky[0] - tank_b_x//2) + 200
         tank_b_poloha[1] = (stred_obrazovky[1] - tank_b_y//2)
         tank_b_uhel = 270
@@ -201,6 +205,12 @@ while True:
     if b_active[0] == True or b_active[1] == True or b_active[2] == True:
         tank_r_body()
     
+    # Strela hitbox
+    strela_b_rect = pygame.Rect(strela_b_poloha[0], strela_b_poloha[1], strela_b_x, strela_b_y)
+        
+    # Strela hitbox
+    strela_r_rect = pygame.Rect(strela_r_poloha[0], strela_r_poloha[1], strela_r_x, strela_r_y)
+
     #R_Tank
     if b_active[0] == True or b_active[1] == True or b_active[2] == True:
         
@@ -235,18 +245,6 @@ while True:
         if strela_r_1_duration == 200:
             strela_r_1 = False
         elif strela_r_1 == True and (b_active[0] == True or b_active[1] == True or b_active[2] == True):
-            
-            # Strela hitbox
-            strela_r_rect = pygame.Rect(strela_r_poloha[0], strela_r_poloha[1], strela_r_x, strela_r_y)
-
-            # Kontrola kolize se strelou
-            if strela_r_rect.colliderect(tank_r_rect) and strela_r_1_duration > 8:
-                # Bodovani
-                tank_r_poloha = [(stred_obrazovky[0] - tank_r_x//2) + random.randint(-700, 700), (stred_obrazovky[1] - tank_r_y//2) + random.randint(-350, 350)]
-                tank_r_uhel = random.choice([90, 180, 270, 360])
-                strela_r_1 = False
-                tank_b_score += 1
-                continue
 
             # Vykreselení strely a pozice
             okno.blit(cannon_ball, (strela_r_poloha[0], strela_r_poloha[1]))
@@ -254,15 +252,32 @@ while True:
             strela_r_poloha[1] -= math.sin(math.radians(strela_r_uhel)) * strela_r_rychlost
             strela_r_1_duration += 1
         
-        if strela_r_poloha[0] > ROZLISENI_OKNA_X - strela_r_x:
-            strela_r_uhel = (180 - strela_r_uhel) % 360
-        if strela_r_poloha[0] < 0:
-            strela_r_uhel = (180 - strela_r_uhel) % 360
-        if strela_r_poloha[1] > ROZLISENI_OKNA_Y - strela_r_y:
-            strela_r_uhel = (360 - strela_r_uhel) % 360
-        if strela_r_poloha[1] < 0:
-            strela_r_uhel = (360 - strela_r_uhel) % 360
-            
+        if b_active[0] == True or b_active[1] == True:
+            if strela_r_poloha[0] > ROZLISENI_OKNA_X - strela_r_x:
+                strela_r_uhel = (180 - strela_r_uhel) % 360
+            if strela_r_poloha[0] < 0:
+                strela_r_uhel = (180 - strela_r_uhel) % 360
+            if strela_r_poloha[1] > ROZLISENI_OKNA_Y - strela_r_y:
+                strela_r_uhel = (360 - strela_r_uhel) % 360
+            if strela_r_poloha[1] < 0:
+                strela_r_uhel = (360 - strela_r_uhel) % 360
+
+        # Kontrola kolize se strelou
+        # Bodovani
+        if strela_r_rect.colliderect(tank_r_rect) and strela_r_1_duration > 8:
+            tank_r_poloha = [(stred_obrazovky[0] - tank_r_x//2) + random.randint(-700, 700), (stred_obrazovky[1] - tank_r_y//2) + random.randint(-350, 350)]
+            tank_r_uhel = random.choice([90, 180, 270, 360])
+            strela_r_1 = False
+            tank_b_score += 1
+            continue
+
+        # Bodovani 2
+        if strela_b_rect.colliderect(tank_r_rect):
+            tank_r_poloha = [(stred_obrazovky[0] - tank_r_x//2) + random.randint(-700, 700), (stred_obrazovky[1] - tank_r_y//2) + random.randint(-350, 350)]
+            tank_r_uhel = random.choice([90, 180, 270, 360])
+            strela_b_1 = False
+            tank_b_score += 1
+
         #pohyb
         if stisknute_klavesy[pygame.K_w]:
             tank_r_rychlost = 3
@@ -331,18 +346,6 @@ while True:
         if strela_b_1_duration == 200:
             strela_b_1 = False
         elif strela_b_1 == True and (b_active[0] == True or b_active[1] == True or b_active[2] == True):
-            
-            # Strela hitbox
-            strela_b_rect = pygame.Rect(strela_b_poloha[0], strela_b_poloha[1], strela_b_x, strela_b_y)
-
-            # Kontrola kolize se strelou
-            if strela_b_rect.colliderect(tank_b_rect) and strela_b_1_duration > 8:
-                # Bodovani
-                tank_b_poloha = [(stred_obrazovky[0] - tank_b_x//2) + random.randint(-700, 700), (stred_obrazovky[1] - tank_b_y//2) + random.randint(-350, 350)]
-                tank_b_uhel = random.choice([90, 180, 270, 360])
-                strela_b_1 = False
-                tank_r_score += 1
-                continue
 
             # Vykreselení strely a pozice
             okno.blit(cannon_ball, (strela_b_poloha[0], strela_b_poloha[1]))
@@ -350,15 +353,32 @@ while True:
             strela_b_poloha[1] -= math.sin(math.radians(strela_b_uhel)) * strela_b_rychlost
             strela_b_1_duration += 1
         
-        if strela_b_poloha[0] > ROZLISENI_OKNA_X - strela_b_x:
-            strela_b_uhel = (180 - strela_b_uhel) % 360
-        if strela_b_poloha[0] < 0:
-            strela_b_uhel = (180 - strela_b_uhel) % 360
-        if strela_b_poloha[1] > ROZLISENI_OKNA_Y - strela_b_y:
-            strela_b_uhel = (360 - strela_b_uhel) % 360
-        if strela_b_poloha[1] < 0:
-            strela_b_uhel = (360 - strela_b_uhel) % 360
-            
+        if b_active[0] == True or b_active[1] == True:
+            if strela_b_poloha[0] > ROZLISENI_OKNA_X - strela_b_x:
+                strela_b_uhel = (180 - strela_b_uhel) % 360
+            if strela_b_poloha[0] < 0:
+                strela_b_uhel = (180 - strela_b_uhel) % 360
+            if strela_b_poloha[1] > ROZLISENI_OKNA_Y - strela_b_y:
+                strela_b_uhel = (360 - strela_b_uhel) % 360
+            if strela_b_poloha[1] < 0:
+                strela_b_uhel = (360 - strela_b_uhel) % 360
+             
+        # Kontrola kolize se strelou
+        if strela_b_rect.colliderect(tank_b_rect) and strela_b_1_duration > 8:
+            # Bodovani
+            tank_b_poloha = [(stred_obrazovky[0] - tank_b_x//2) + random.randint(-700, 700), (stred_obrazovky[1] - tank_b_y//2) + random.randint(-350, 350)]
+            tank_b_uhel = random.choice([90, 180, 270, 360])
+            strela_b_1 = False
+            tank_r_score += 1
+        
+        if strela_r_rect.colliderect(tank_b_rect):
+            # Bodovani
+            tank_b_poloha = [(stred_obrazovky[0] - tank_b_x//2) + random.randint(-700, 700), (stred_obrazovky[1] - tank_b_y//2) + random.randint(-350, 350)]
+            tank_b_uhel = random.choice([90, 180, 270, 360])
+            strela_r_1 = False
+            tank_r_score += 1
+
+
         #pohyb
         if stisknute_klavesy[pygame.K_UP]:
             tank_b_rychlost = 3
