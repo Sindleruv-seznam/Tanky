@@ -117,6 +117,10 @@ while True:
         b_active[1] = False 
         b_active[2] = False
 
+        ROZLISENI_OKNA_X = 1600
+        ROZLISENI_OKNA_Y = 900
+        okno = pygame.display.set_mode((ROZLISENI_OKNA_X, ROZLISENI_OKNA_Y))
+
         tank_r_score = 0
         tank_r_poloha[0] = (stred_obrazovky[0] - tank_r_x//2) - 200
         tank_r_poloha[1] = (stred_obrazovky[1] - tank_r_y//2)
@@ -193,7 +197,7 @@ while True:
 
     def tank_b_body():
         text_pvp_tank_b = font.render("Blu: " + str(tank_b_score), True, blue)
-        okno.blit(text_pvp_tank_b, (1520, 10))
+        okno.blit(text_pvp_tank_b, (ROZLISENI_OKNA_X - 80, 10))
 
 
     if b_active[0] == False and b_active[1] == False and b_active[2] == False:
@@ -270,6 +274,8 @@ while True:
             tank_r_poloha = [(stred_obrazovky[0] - tank_r_x//2) + random.randint(-700, 700), (stred_obrazovky[1] - tank_r_y//2) + random.randint(-350, 350)]
             tank_r_uhel = random.choice([90, 180, 270, 360])
             strela_r_1 = False
+            strela_r_poloha[1] = -100
+            strela_r_poloha[0] = -100
             tank_b_score += 1
 
         # Bodovani 2
@@ -277,6 +283,8 @@ while True:
             tank_r_poloha = [(stred_obrazovky[0] - tank_r_x//2) + random.randint(-700, 700), (stred_obrazovky[1] - tank_r_y//2) + random.randint(-350, 350)]
             tank_r_uhel = random.choice([90, 180, 270, 360])
             strela_b_1 = False
+            strela_b_poloha[1] = -100
+            strela_b_poloha[0] = -100
             tank_b_score += 1
 
         #pohyb
@@ -367,18 +375,43 @@ while True:
                 strela_b_uhel = (360 - strela_b_uhel) % 360
 
         if b_active[2] == True:
-            if strela_b_poloha[0] > ROZLISENI_OKNA_X - strela_b_x:
-                ROZLISENI_OKNA_X -= 16
-                strela_b_1 = False
-            if strela_b_poloha[0] < 0:
-                ROZLISENI_OKNA_X -= 16
-                strela_b_1 = False
-            if strela_b_poloha[1] > ROZLISENI_OKNA_Y - strela_b_y:
-                ROZLISENI_OKNA_Y -= 9
-                strela_b_1 = False
-            if strela_b_poloha[1] < 0:
-                ROZLISENI_OKNA_Y -= 9
-                strela_b_1 = False
+            if ROZLISENI_OKNA_X > 480:
+                if strela_b_poloha[0] > ROZLISENI_OKNA_X - strela_b_x:
+                    ROZLISENI_OKNA_X -= 16
+                    okno = pygame.display.set_mode((ROZLISENI_OKNA_X, ROZLISENI_OKNA_Y))
+                    strela_b_1 = False
+                    strela_b_poloha[0] = 0
+                    strela_b_poloha[1] = 0
+                if strela_b_poloha[0] < 0:
+                    ROZLISENI_OKNA_X -= 16
+                    okno = pygame.display.set_mode((ROZLISENI_OKNA_X, ROZLISENI_OKNA_Y))
+                    strela_b_1 = False
+                    strela_b_poloha[0] = 0
+                    strela_b_poloha[1] = 0
+            else:
+                if strela_b_poloha[0] > ROZLISENI_OKNA_X - strela_b_x:
+                    strela_b_uhel = (180 - strela_b_uhel) % 360
+                if strela_b_poloha[0] < 0:
+                    strela_b_uhel = (180 - strela_b_uhel) % 360
+
+            if ROZLISENI_OKNA_Y > 270:
+                if strela_b_poloha[1] > ROZLISENI_OKNA_Y - strela_b_y:
+                    ROZLISENI_OKNA_Y -= 9
+                    okno = pygame.display.set_mode((ROZLISENI_OKNA_X, ROZLISENI_OKNA_Y))
+                    strela_b_1 = False
+                    strela_b_poloha[0] = 0
+                    strela_b_poloha[1] = 0
+                if strela_b_poloha[1] < 0:
+                    ROZLISENI_OKNA_Y -= 9
+                    okno = pygame.display.set_mode((ROZLISENI_OKNA_X, ROZLISENI_OKNA_Y))
+                    strela_b_1 = False
+                    strela_b_poloha[0] = 0
+                    strela_b_poloha[1] = 0
+            else:
+                if strela_b_poloha[1] > ROZLISENI_OKNA_Y - strela_b_y:
+                    strela_b_uhel = (360 - strela_b_uhel) % 360
+                if strela_b_poloha[1] < 0:
+                    strela_b_uhel = (360 - strela_b_uhel) % 360
 
         # Kontrola kolize se strelou
         if strela_b_rect.colliderect(tank_b_rect) and strela_b_1_duration > 8:
@@ -386,6 +419,8 @@ while True:
             tank_b_poloha = [(stred_obrazovky[0] - tank_b_x//2) + random.randint(-700, 700), (stred_obrazovky[1] - tank_b_y//2) + random.randint(-350, 350)]
             tank_b_uhel = random.choice([90, 180, 270, 360])
             strela_b_1 = False
+            strela_b_poloha[1] = -100
+            strela_b_poloha[0] = -100
             tank_r_score += 1
         
         if strela_r_rect.colliderect(tank_b_rect):
@@ -393,6 +428,8 @@ while True:
             tank_b_poloha = [(stred_obrazovky[0] - tank_b_x//2) + random.randint(-700, 700), (stred_obrazovky[1] - tank_b_y//2) + random.randint(-350, 350)]
             tank_b_uhel = random.choice([90, 180, 270, 360])
             strela_r_1 = False
+            strela_r_poloha[1] = -100
+            strela_r_poloha[0] = -100
             tank_r_score += 1
 
 
