@@ -241,7 +241,7 @@ while True:
             strela_r_1_duration = 0
             strela_r_cooldown = 20
             strela_r_uhel = copy.copy(tank_r_uhel)
-            spawn_distance = tank_r_x//2 + 5
+            spawn_distance = tank_r_x//2 + 2
             strela_r_poloha[0] = (tank_r_poloha[0] + tank_r_x//2) + math.cos(math.radians(tank_r_uhel)) * spawn_distance - strela_r_x//2
             strela_r_poloha[1] = (tank_r_poloha[1] + tank_r_y//2) - math.sin(math.radians(tank_r_uhel)) * spawn_distance - strela_r_y//2
 
@@ -390,7 +390,7 @@ while True:
             strela_b_1_duration = 0
             strela_b_cooldown = 20
             strela_b_uhel = copy.copy(tank_b_uhel)
-            spawn_distance = tank_b_x//2 + 5
+            spawn_distance = tank_b_x//2 + 2
             strela_b_poloha[0] = (tank_b_poloha[0] + tank_b_x//2) + math.cos(math.radians(tank_b_uhel)) * spawn_distance - strela_b_x//2
             strela_b_poloha[1] = (tank_b_poloha[1] + tank_b_y//2) - math.sin(math.radians(tank_b_uhel)) * spawn_distance - strela_b_y//2
 
