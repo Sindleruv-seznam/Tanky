@@ -272,6 +272,47 @@ while True:
             if strela_r_poloha[1] < 0:
                 strela_r_uhel = (360 - strela_r_uhel) % 360
 
+        #Clasutrophobia
+        if b_active[2] == True:
+            if ROZLISENI_OKNA_X > 480:
+                if strela_r_poloha[0] > ROZLISENI_OKNA_X - strela_r_x:
+                    ROZLISENI_OKNA_X -= 16
+                    okno = pygame.display.set_mode((ROZLISENI_OKNA_X, ROZLISENI_OKNA_Y))
+                    strela_r_1 = False
+                    strela_r_poloha[0] = 0
+                    strela_r_poloha[1] = 0
+                if strela_r_poloha[0] < 0:
+                    ROZLISENI_OKNA_X -= 16
+                    okno = pygame.display.set_mode((ROZLISENI_OKNA_X, ROZLISENI_OKNA_Y))
+                    strela_r_1 = False
+                    strela_r_poloha[0] = 0
+                    strela_r_poloha[1] = 0
+            else:
+                if strela_r_poloha[0] > ROZLISENI_OKNA_X - strela_b_x:
+                    strela_r_uhel = (180 - strela_r_uhel) % 360
+                if strela_r_poloha[0] < 0:
+                    strela_r_uhel = (180 - strela_r_uhel) % 360
+
+            if ROZLISENI_OKNA_Y > 270:
+                if strela_r_poloha[1] > ROZLISENI_OKNA_Y - strela_r_y:
+                    ROZLISENI_OKNA_Y -= 9
+                    okno = pygame.display.set_mode((ROZLISENI_OKNA_X, ROZLISENI_OKNA_Y))
+                    strela_r_1 = False
+                    strela_r_poloha[0] = 0
+                    strela_r_poloha[1] = 0
+                if strela_r_poloha[1] < 0:
+                    ROZLISENI_OKNA_Y -= 9
+                    okno = pygame.display.set_mode((ROZLISENI_OKNA_X, ROZLISENI_OKNA_Y))
+                    strela_r_1 = False
+                    strela_r_poloha[0] = 0
+                    strela_r_poloha[1] = 0
+            else:
+                if strela_r_poloha[1] > ROZLISENI_OKNA_Y - strela_r_y:
+                    strela_r_uhel = (360 - strela_r_uhel) % 360
+                if strela_r_poloha[1] < 0:
+                    strela_r_uhel = (360 - strela_r_uhel) % 360
+
+
         # Kontrola kolize se strelou
         # Bodovani
         if strela_r_rect.colliderect(tank_r_rect) and strela_r_1_duration > 8:
