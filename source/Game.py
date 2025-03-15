@@ -84,12 +84,14 @@ strela_r_rychlost = 5
 strela_r_poloha = [tank_r_poloha[0], tank_r_poloha[1]]
 strela_r_1 = False
 strela_r_1_duration = 0
+strela_r_cooldown = 0
 global strela_r_rect
 
 strela_b_rychlost = 5
 strela_b_poloha = [tank_b_poloha[0], tank_b_poloha[1]]
 strela_b_1 = False
 strela_b_1_duration = 0
+strela_b_cooldown = 0
 global strela_b_rect
 
 # vykreslovaci smycka 
@@ -234,15 +236,16 @@ while True:
         okno.blit(tank_r_rotovany, tank_r_rect.topleft)
 
         #strelba
-        if stisknute_klavesy[pygame.K_SPACE] and strela_r_1 == False and (b_active[0] == True or b_active[1] == True or b_active[2] == True):
+        if stisknute_klavesy[pygame.K_SPACE] and strela_r_1 == False and strela_r_cooldown <= 0 and (b_active[0] == True or b_active[1] == True or b_active[2] == True):
             strela_r_1 = True
             strela_r_1_duration = 0
+            strela_r_cooldown = 20
             strela_r_uhel = copy.copy(tank_r_uhel)
             spawn_distance = tank_r_x//2 + 5
             strela_r_poloha[0] = (tank_r_poloha[0] + tank_r_x//2) + math.cos(math.radians(tank_r_uhel)) * spawn_distance - strela_r_x//2
             strela_r_poloha[1] = (tank_r_poloha[1] + tank_r_y//2) - math.sin(math.radians(tank_r_uhel)) * spawn_distance - strela_r_y//2
 
-        if stisknute_klavesy[pygame.K_SPACE] and strela_r_1 == False and (b_active[0] == True or b_active[1] == True or b_active[2] == True):
+        if stisknute_klavesy[pygame.K_SPACE] and strela_r_1 == False and strela_r_cooldown <= 0 and (b_active[0] == True or b_active[1] == True or b_active[2] == True):
             strela_r_1 = True
             strela_r_uhel = copy.copy(tank_r_uhel)
 
@@ -257,6 +260,7 @@ while True:
             strela_r_poloha[0] += math.cos(math.radians(strela_r_uhel)) * strela_r_rychlost
             strela_r_poloha[1] -= math.sin(math.radians(strela_r_uhel)) * strela_r_rychlost
             strela_r_1_duration += 1
+        strela_r_cooldown -=1
         
         if b_active[0] == True or b_active[1] == True:
             if strela_r_poloha[0] > ROZLISENI_OKNA_X - strela_r_x:
@@ -340,15 +344,16 @@ while True:
         okno.blit(tank_b_rotovany, tank_b_rect.topleft)
 
         #strelba
-        if stisknute_klavesy[pygame.K_RCTRL] and strela_b_1 == False and (b_active[0] == True or b_active[1] == True or b_active[2] == True):
+        if stisknute_klavesy[pygame.K_RCTRL] and strela_b_1 == False and strela_b_cooldown <= 0 and (b_active[0] == True or b_active[1] == True or b_active[2] == True):
             strela_b_1 = True
             strela_b_1_duration = 0
+            strela_b_cooldown = 20
             strela_b_uhel = copy.copy(tank_b_uhel)
             spawn_distance = tank_b_x//2 + 5
             strela_b_poloha[0] = (tank_b_poloha[0] + tank_b_x//2) + math.cos(math.radians(tank_b_uhel)) * spawn_distance - strela_b_x//2
             strela_b_poloha[1] = (tank_b_poloha[1] + tank_b_y//2) - math.sin(math.radians(tank_b_uhel)) * spawn_distance - strela_b_y//2
 
-        if stisknute_klavesy[pygame.K_RCTRL] and strela_b_1 == False and (b_active[0] == True or b_active[1] == True or b_active[2] == True):
+        if stisknute_klavesy[pygame.K_RCTRL] and strela_b_1 == False and strela_b_cooldown <= 0 and (b_active[0] == True or b_active[1] == True or b_active[2] == True):
             strela_b_1 = True
             strela_b_uhel = copy.copy(tank_b_uhel)
 
@@ -363,6 +368,7 @@ while True:
             strela_b_poloha[0] += math.cos(math.radians(strela_b_uhel)) * strela_b_rychlost
             strela_b_poloha[1] -= math.sin(math.radians(strela_b_uhel)) * strela_b_rychlost
             strela_b_1_duration += 1
+        strela_b_cooldown -= 1
         
         if b_active[0] == True or b_active[1] == True:
             if strela_b_poloha[0] > ROZLISENI_OKNA_X - strela_b_x:
@@ -374,6 +380,7 @@ while True:
             if strela_b_poloha[1] < 0:
                 strela_b_uhel = (360 - strela_b_uhel) % 360
 
+        #Clasutrophobia
         if b_active[2] == True:
             if ROZLISENI_OKNA_X > 480:
                 if strela_b_poloha[0] > ROZLISENI_OKNA_X - strela_b_x:
