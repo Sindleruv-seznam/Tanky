@@ -30,6 +30,8 @@ obrazek_cesta_cannon_ball = os.path.join(aktualni_dir, 'textures', 'canon_shot.p
 cannon_ball = pygame.image.load(obrazek_cesta_cannon_ball).convert_alpha()
 obrazek_cesta_tank_b = os.path.join(aktualni_dir, 'textures', 'blue_tank.png')
 tank_b_small = pygame.image.load(obrazek_cesta_tank_b).convert_alpha()
+obrazek_cesta_box = os.path.join(aktualni_dir, 'textures', 'box.png')
+box_small = pygame.image.load(obrazek_cesta_box).convert_alpha()
 
 #velikost obrazku
 tank_r_x, tank_r_y = tank_r_small.get_size()
@@ -39,10 +41,15 @@ tank_r_y = tank_r_y * 2
 tank_b_y = tank_r_y
 tank_b_x = tank_r_x
 
+box_x, box_y = box_small.get_size()
+box_x = box_x * 2
+box_y = box_y * 2
+
 tank_r = pygame.transform.scale(tank_r_small, (tank_r_x, tank_r_y))
 strela_r_x, strela_r_y = cannon_ball.get_size()
 tank_b = pygame.transform.scale(tank_b_small, (tank_b_x, tank_b_y))
 strela_b_x, strela_b_y = cannon_ball.get_size()
+box = pygame.transform.scale(box_small, (box_x, box_y))
 
 # priprava promennych 
 
@@ -217,6 +224,7 @@ while True:
     # Strela hitbox
     strela_r_rect = pygame.Rect(strela_r_poloha[0], strela_r_poloha[1], strela_r_x, strela_r_y)
 
+    okno.blit(box, (stred_obrazovky[0], stred_obrazovky[1]))
     #R_Tank
     if b_active[0] == True or b_active[1] == True or b_active[2] == True:
         
