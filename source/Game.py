@@ -60,8 +60,10 @@ strela_b_x, strela_b_y = cannon_ball.get_size()
 box = pygame.transform.scale(box_small, (box_x, box_y))
 
 original_cannon_ball = cannon_ball.copy()
-cannonball_enlarged = False
-original_strela_r_x, original_strela_r_y = strela_r_x, strela_r_y
+original_strela_r_x = strela_r_x
+original_strela_r_y = strela_r_y
+original_strela_b_x = strela_b_x
+original_strela_b_y = strela_b_y
 
 # priprava promennych 
 
@@ -582,6 +584,7 @@ while True:
             box_poloha[1] = (random.randint(100, 800)) - box_y//2
 
     #powerupy
+    #tank_r
     if b_active[1] == True:
         if box_powerup_tank_r_sniper == True and box_powerup_tank_r_duration < 400:
             if strela_r_1 == False:
@@ -612,6 +615,35 @@ while True:
                 strela_r_y = original_strela_r_y
                 strela_r_rychlost = 5
 
+    #tank_b
+        if box_powerup_tank_b_sniper == True and box_powerup_tank_b_duration < 400:
+            if strela_b_1 == False:
+                strela_b_rychlost = 20
+            box_powerup_tank_b_duration += 1
+        else:
+            if box_powerup_tank_b_sniper == True:
+                box_powerup_tank_b_sniper = False
+                box_powerup_tank_b_duration = 0
+            if strela_b_1 == False:
+                strela_b_rychlost = 5
+        
+        if box_powerup_tank_b_gatling == True and box_powerup_tank_b_duration < 400:
+            if strela_b_1 == False:
+                strela_b_rychlost = 7
+                cannon_ball_b = pygame.transform.scale(original_cannon_ball_b, (original_strela_b_x * 5, original_strela_b_y * 5))
+                strela_b_x = original_strela_b_x * 5
+                strela_b_y = original_strela_b_y * 5
+                tank_b_invincibility = 20
+            box_powerup_tank_b_duration += 1
+        elif box_powerup_tank_b_sniper == False:
+            if box_powerup_tank_b_gatling == True:
+                box_powerup_tank_b_gatling = False
+                box_powerup_tank_b_duration = 0
+            if strela_b_1 == False:
+                cannon_ball_b = original_cannon_ball_b.copy()
+                strela_b_x = original_strela_b_x
+                strela_b_y = original_strela_b_y
+                strela_b_rychlost = 5
 
     pygame.display.update() # prehozeni framebufferu na displej
 
