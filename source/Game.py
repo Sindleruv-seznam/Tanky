@@ -318,13 +318,13 @@ while True:
         if b_active[2] == True:
             if ROZLISENI_OKNA_X > 480:
                 if strela_r_poloha[0] > ROZLISENI_OKNA_X - strela_r_x:
-                    ROZLISENI_OKNA_X -= 16
+                    ROZLISENI_OKNA_X -= 80
                     okno = pygame.display.set_mode((ROZLISENI_OKNA_X, ROZLISENI_OKNA_Y))
                     strela_r_1 = False
                     strela_r_poloha[0] = -100
                     strela_r_poloha[1] = -100
                 if strela_r_poloha[0] < 0 and strela_r_poloha[0] > -50:
-                    ROZLISENI_OKNA_X -= 16
+                    ROZLISENI_OKNA_X -= 80
                     okno = pygame.display.set_mode((ROZLISENI_OKNA_X, ROZLISENI_OKNA_Y))
                     strela_r_1 = False
                     strela_r_poloha[0] = -100
@@ -337,13 +337,13 @@ while True:
 
             if ROZLISENI_OKNA_Y > 270:
                 if strela_r_poloha[1] > ROZLISENI_OKNA_Y - strela_r_y:
-                    ROZLISENI_OKNA_Y -= 9
+                    ROZLISENI_OKNA_Y -= 45
                     okno = pygame.display.set_mode((ROZLISENI_OKNA_X, ROZLISENI_OKNA_Y))
                     strela_r_1 = False
                     strela_r_poloha[0] = -100
                     strela_r_poloha[1] = -100
                 if strela_r_poloha[1] < 0 and strela_r_poloha[1] > -50:
-                    ROZLISENI_OKNA_Y -= 9
+                    ROZLISENI_OKNA_Y -= 45
                     okno = pygame.display.set_mode((ROZLISENI_OKNA_X, ROZLISENI_OKNA_Y))
                     strela_r_1 = False
                     strela_r_poloha[0] = -100
@@ -358,7 +358,7 @@ while True:
         # Kontrola kolize se strelou
         # Bodovani
         if strela_r_rect.colliderect(tank_r_rect) and strela_r_1_duration > tank_r_invincibility:
-            tank_r_poloha = [(stred_obrazovky[0] - tank_r_x//2) + random.randint(-700, 700), (stred_obrazovky[1] - tank_r_y//2) + random.randint(-350, 350)]
+            tank_r_poloha = [random.randint(50, (ROZLISENI_OKNA_X - 100)) - tank_r_x//2, random.randint(50, (ROZLISENI_OKNA_Y - 100)) - tank_r_y//2]
             tank_r_uhel = random.choice([90, 180, 270, 360])
             strela_r_1 = False
             strela_r_poloha[1] = -100
@@ -467,13 +467,13 @@ while True:
         if b_active[2] == True:
             if ROZLISENI_OKNA_X > 480:
                 if strela_b_poloha[0] > ROZLISENI_OKNA_X - strela_b_x:
-                    ROZLISENI_OKNA_X -= 16
+                    ROZLISENI_OKNA_X -= 80
                     okno = pygame.display.set_mode((ROZLISENI_OKNA_X, ROZLISENI_OKNA_Y))
                     strela_b_1 = False
                     strela_b_poloha[0] = -100
                     strela_b_poloha[1] = -100
                 if strela_b_poloha[0] < 0 and strela_b_poloha[0] > -50:
-                    ROZLISENI_OKNA_X -= 16
+                    ROZLISENI_OKNA_X -= 80
                     okno = pygame.display.set_mode((ROZLISENI_OKNA_X, ROZLISENI_OKNA_Y))
                     strela_b_1 = False
                     strela_b_poloha[0] = -100
@@ -486,13 +486,13 @@ while True:
 
             if ROZLISENI_OKNA_Y > 270:
                 if strela_b_poloha[1] > ROZLISENI_OKNA_Y - strela_b_y:
-                    ROZLISENI_OKNA_Y -= 9
+                    ROZLISENI_OKNA_Y -= 45
                     okno = pygame.display.set_mode((ROZLISENI_OKNA_X, ROZLISENI_OKNA_Y))
                     strela_b_1 = False
                     strela_b_poloha[0] = -100
                     strela_b_poloha[1] = -100
                 if strela_b_poloha[1] < 0 and strela_b_poloha[1] > -50:
-                    ROZLISENI_OKNA_Y -= 9
+                    ROZLISENI_OKNA_Y -= 45
                     okno = pygame.display.set_mode((ROZLISENI_OKNA_X, ROZLISENI_OKNA_Y))
                     strela_b_1 = False
                     strela_b_poloha[0] = -100
@@ -506,7 +506,7 @@ while True:
         # Kontrola kolize se strelou
         if strela_b_rect.colliderect(tank_b_rect) and strela_b_1_duration > tank_b_invincibility:
             # Bodovani
-            tank_b_poloha = [(stred_obrazovky[0] - tank_b_x//2) + random.randint(-700, 700), (stred_obrazovky[1] - tank_b_y//2) + random.randint(-350, 350)]
+            tank_b_poloha = [random.randint(50, (ROZLISENI_OKNA_X - 100)) - tank_b_x//2, random.randint(50, (ROZLISENI_OKNA_Y - 100)) - tank_b_y//2]
             tank_b_uhel = random.choice([90, 180, 270, 360])
             strela_b_1 = False
             strela_b_poloha[1] = -100
@@ -515,7 +515,7 @@ while True:
         
         if strela_r_rect.colliderect(tank_b_rect):
             # Bodovani
-            tank_b_poloha = [(stred_obrazovky[0] - tank_b_x//2) + random.randint(-700, 700), (stred_obrazovky[1] - tank_b_y//2) + random.randint(-350, 350)]
+            tank_b_poloha = [random.randint(50, (ROZLISENI_OKNA_X - 100)) - tank_b_x//2, random.randint(50, (ROZLISENI_OKNA_Y - 100)) - tank_b_y//2]
             tank_b_uhel = random.choice([90, 180, 270, 360])
             strela_r_1 = False
             strela_r_poloha[1] = -100
