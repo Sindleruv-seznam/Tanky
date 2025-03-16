@@ -20,6 +20,9 @@ pygame.display.set_caption('Tank trouble')
  
 casovac_FPS = pygame.time.Clock()
 
+global res_reset
+res_reset = True
+
 #priprava textur
 
 #nacteni obrazku
@@ -87,6 +90,7 @@ tank_b_rotovany = pygame.transform.rotate(tank_b, tank_b_uhel)
 tank_b_rect = tank_b_rotovany.get_rect(center=(tank_b_poloha[0] + tank_b_x//2, tank_b_poloha[1] + tank_b_y//2))
 tank_b_score = 0
 
+strela_r_uhel = 90
 strela_r_rychlost = 5
 strela_r_poloha = [tank_r_poloha[0], tank_r_poloha[1]]
 strela_r_1 = False
@@ -94,12 +98,22 @@ strela_r_1_duration = 0
 strela_r_cooldown = 0
 global strela_r_rect
 
+strela_b_uhel = 90
 strela_b_rychlost = 5
 strela_b_poloha = [tank_b_poloha[0], tank_b_poloha[1]]
 strela_b_1 = False
 strela_b_1_duration = 0
 strela_b_cooldown = 0
 global strela_b_rect
+
+box_cooldown = 0
+box_poloha = [0, 0]
+box_powerup_tank_r_sniper = False
+box_powerup_tank_r_gatling = False
+box_powerup_tank_r_duration = 0
+box_powerup_tank_b_sniper = False
+box_powerup_tank_b_gatling = False
+box_powerup_tank_b_duration = 0
 
 # vykreslovaci smycka 
 while True: 
@@ -128,7 +142,9 @@ while True:
 
         ROZLISENI_OKNA_X = 1600
         ROZLISENI_OKNA_Y = 900
-        okno = pygame.display.set_mode((ROZLISENI_OKNA_X, ROZLISENI_OKNA_Y))
+        if res_reset == False:
+            okno = pygame.display.set_mode((ROZLISENI_OKNA_X, ROZLISENI_OKNA_Y))
+        res_reset = True
 
         tank_r_score = 0
         tank_r_poloha[0] = (stred_obrazovky[0] - tank_r_x//2) - 200
@@ -146,6 +162,7 @@ while True:
         strela_b_poloha[1] = (tank_b_poloha[1] + tank_b_y//2)
         strela_b_1 = False
 
+        box_cooldown = 0
     # VYKRESLOVANI APLIKACE 
      
     okno.fill((white)) # prebarveni okna jednolitou barvou 
@@ -162,6 +179,7 @@ while True:
 
         if button1.collidepoint(pozice_mysi) and LMB_active == True:
             b_active[0] = True
+            res_reset = False
 
         text1 = font.render("PvE", True, grey)
         text1_rect = text1.get_rect(center=button1.center)
@@ -177,6 +195,7 @@ while True:
         
         if button2.collidepoint(pozice_mysi) and LMB_active == True:
             b_active[1] = True
+            res_reset = False
 
         text2 = font.render("PvP", True, grey)
         text2_rect = text2.get_rect(center=button2.center)
@@ -192,6 +211,7 @@ while True:
         
         if button3.collidepoint(pozice_mysi) and LMB_active == True:
             b_active[2] = True
+            res_reset = False
 
         text3 = font.render("Claustrophobia", True, grey)
         text3_rect = text3.get_rect(center=button3.center)
@@ -224,7 +244,9 @@ while True:
     # Strela hitbox
     strela_r_rect = pygame.Rect(strela_r_poloha[0], strela_r_poloha[1], strela_r_x, strela_r_y)
 
-    okno.blit(box, (stred_obrazovky[0], stred_obrazovky[1]))
+    #box hitbox
+    box_rect = pygame.Rect(box_poloha[0], box_poloha[1], box_x, box_y)
+
     #R_Tank
     if b_active[0] == True or b_active[1] == True or b_active[2] == True:
         
@@ -323,7 +345,7 @@ while True:
 
         # Kontrola kolize se strelou
         # Bodovani
-        if strela_r_rect.colliderect(tank_r_rect) and strela_r_1_duration > 8:
+        if strela_r_rect.colliderect(tank_r_rect) and strela_r_1_duration > 9:
             tank_r_poloha = [(stred_obrazovky[0] - tank_r_x//2) + random.randint(-700, 700), (stred_obrazovky[1] - tank_r_y//2) + random.randint(-350, 350)]
             tank_r_uhel = random.choice([90, 180, 270, 360])
             strela_r_1 = False
@@ -470,7 +492,7 @@ while True:
                     strela_b_uhel = (360 - strela_b_uhel) % 360
 
         # Kontrola kolize se strelou
-        if strela_b_rect.colliderect(tank_b_rect) and strela_b_1_duration > 8:
+        if strela_b_rect.colliderect(tank_b_rect) and strela_b_1_duration > 9:
             # Bodovani
             tank_b_poloha = [(stred_obrazovky[0] - tank_b_x//2) + random.randint(-700, 700), (stred_obrazovky[1] - tank_b_y//2) + random.randint(-350, 350)]
             tank_b_uhel = random.choice([90, 180, 270, 360])
@@ -522,6 +544,58 @@ while True:
             tank_b_poloha[1] -= tank_b_rect.top
         if tank_b_rect.bottom > ROZLISENI_OKNA_Y:
             tank_b_poloha[1] -= (tank_b_rect.bottom - ROZLISENI_OKNA_Y)
+
+    #box
+    if b_active[1] == True:
+        if box_cooldown > 100:
+            okno.blit(box, (box_poloha[0], box_poloha[1]))
+            if box_rect.colliderect(tank_r_rect):
+                if random.randint(0, 1) == 0:
+                    box_powerup_tank_r_sniper = True
+                    box_powerup_tank_r_gatling = False
+                else:
+                    box_powerup_tank_r_sniper = False
+                    box_powerup_tank_r_gatling = True
+                box_cooldown = 0
+                                    
+            if box_rect.colliderect(tank_b_rect):
+                if random.randint(0, 1) == 0:
+                    box_powerup_tank_b_sniper = True
+                    box_powerup_tank_b_gatling = False
+                else:
+                    box_powerup_tank_b_sniper = False
+                    box_powerup_tank_b_gatling = True
+                box_cooldown = 0
+        else:
+            box_cooldown += 1
+            box_poloha[0] = (random.randint(100, 1500)) - box_x//2
+            box_poloha[1] = (random.randint(100, 800)) - box_y//2
+
+    #powerupy
+    if b_active[1] == True:
+        if box_powerup_tank_r_sniper == True and box_powerup_tank_r_duration < 400:
+            if strela_r_1 == False:
+                strela_r_rychlost = 15
+            box_powerup_tank_r_duration += 1
+        else:
+            if box_powerup_tank_r_sniper == True:
+                box_powerup_tank_r_sniper = False
+                box_powerup_tank_r_duration = 0
+            if strela_r_1 == False:
+                strela_r_rychlost = 5
+        
+    if b_active[1] == True:
+        if box_powerup_tank_b_sniper == True and box_powerup_tank_b_duration < 400:
+            if strela_b_1 == False:
+                strela_b_rychlost = 15
+            box_powerup_tank_b_duration += 1
+        else:
+            if box_powerup_tank_b_sniper == True:
+                box_powerup_tank_b_sniper = False
+                box_powerup_tank_b_duration = 0
+            if strela_b_1 == False:
+                strela_b_rychlost = 5
+
 
     pygame.display.update() # prehozeni framebufferu na displej
 
