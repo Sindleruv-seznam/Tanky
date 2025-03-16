@@ -179,7 +179,6 @@ while True:
 
         if button1.collidepoint(pozice_mysi) and LMB_active == True:
             b_active[0] = True
-            res_reset = False
 
         text1 = font.render("PvE", True, grey)
         text1_rect = text1.get_rect(center=button1.center)
@@ -195,7 +194,6 @@ while True:
         
         if button2.collidepoint(pozice_mysi) and LMB_active == True:
             b_active[1] = True
-            res_reset = False
 
         text2 = font.render("PvP", True, grey)
         text2_rect = text2.get_rect(center=button2.center)
@@ -211,7 +209,6 @@ while True:
         
         if button3.collidepoint(pozice_mysi) and LMB_active == True:
             b_active[2] = True
-            res_reset = False
 
         text3 = font.render("Claustrophobia", True, grey)
         text3_rect = text3.get_rect(center=button3.center)
@@ -237,6 +234,8 @@ while True:
     
     if b_active[0] == True or b_active[1] == True or b_active[2] == True:
         tank_r_body()
+        res_reset = False
+
     
     # Strela hitbox
     strela_b_rect = pygame.Rect(strela_b_poloha[0], strela_b_poloha[1], strela_b_x, strela_b_y)
