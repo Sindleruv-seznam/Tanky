@@ -83,12 +83,14 @@ tank_r_rotace_rychlost = 3
 tank_r_rotovany = pygame.transform.rotate(tank_r, tank_r_uhel)
 tank_r_rect = tank_r_rotovany.get_rect(center=(tank_r_poloha[0] + tank_r_x//2, tank_r_poloha[1] + tank_r_y//2))
 tank_r_score = 0
+tank_r_invincibility = 9
 
 tank_b_uhel = 270
 tank_b_rotace_rychlost = 3
 tank_b_rotovany = pygame.transform.rotate(tank_b, tank_b_uhel)
 tank_b_rect = tank_b_rotovany.get_rect(center=(tank_b_poloha[0] + tank_b_x//2, tank_b_poloha[1] + tank_b_y//2))
 tank_b_score = 0
+tank_b_invincibility = 9
 
 strela_r_uhel = 90
 strela_r_rychlost = 5
@@ -344,7 +346,7 @@ while True:
 
         # Kontrola kolize se strelou
         # Bodovani
-        if strela_r_rect.colliderect(tank_r_rect) and strela_r_1_duration > 9:
+        if strela_r_rect.colliderect(tank_r_rect) and strela_r_1_duration > tank_r_invincibility:
             tank_r_poloha = [(stred_obrazovky[0] - tank_r_x//2) + random.randint(-700, 700), (stred_obrazovky[1] - tank_r_y//2) + random.randint(-350, 350)]
             tank_r_uhel = random.choice([90, 180, 270, 360])
             strela_r_1 = False
@@ -491,7 +493,7 @@ while True:
                     strela_b_uhel = (360 - strela_b_uhel) % 360
 
         # Kontrola kolize se strelou
-        if strela_b_rect.colliderect(tank_b_rect) and strela_b_1_duration > 9:
+        if strela_b_rect.colliderect(tank_b_rect) and strela_b_1_duration > tank_b_invincibility:
             # Bodovani
             tank_b_poloha = [(stred_obrazovky[0] - tank_b_x//2) + random.randint(-700, 700), (stred_obrazovky[1] - tank_b_y//2) + random.randint(-350, 350)]
             tank_b_uhel = random.choice([90, 180, 270, 360])
@@ -584,6 +586,21 @@ while True:
                 strela_r_rychlost = 5
         
     if b_active[1] == True:
+        if box_powerup_tank_r_gatling == True and box_powerup_tank_r_duration < 400:
+            if strela_r_1 == False:
+                strela_r_rychlost = 5
+                cannon_ball = pygame.transform.scale(cannon_ball, (strela_r_x * 10, strela_r_y * 10))
+                strela_r_rect = pygame.Rect(strela_r_poloha[0], strela_r_poloha[1], strela_r_x, strela_r_y)
+                tank_r_invincibility = 20
+            box_powerup_tank_r_duration += 1
+        else:
+            if box_powerup_tank_r_gatling == True:
+                box_powerup_tank_r_gatling = False
+                box_powerup_tank_r_duration = 0
+            if strela_r_1 == False:
+                strela_r_rychlost = 5
+
+    if b_active[1] == True:
         if box_powerup_tank_b_sniper == True and box_powerup_tank_b_duration < 400:
             if strela_b_1 == False:
                 strela_b_rychlost = 15
@@ -594,7 +611,6 @@ while True:
                 box_powerup_tank_b_duration = 0
             if strela_b_1 == False:
                 strela_b_rychlost = 5
-
 
     pygame.display.update() # prehozeni framebufferu na displej
 
