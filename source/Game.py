@@ -367,7 +367,7 @@ while True:
 
         # Bodovani 2
         if strela_b_rect.colliderect(tank_r_rect):
-            tank_r_poloha = [(stred_obrazovky[0] - tank_r_x//2) + random.randint(-700, 700), (stred_obrazovky[1] - tank_r_y//2) + random.randint(-350, 350)]
+            tank_r_poloha = [random.randint(50, (ROZLISENI_OKNA_X - 100)) - tank_r_x//2, random.randint(50, (ROZLISENI_OKNA_Y - 100)) - tank_r_y//2]
             tank_r_uhel = random.choice([90, 180, 270, 360])
             strela_b_1 = False
             strela_b_poloha[1] = -100
@@ -614,6 +614,7 @@ while True:
                 strela_r_x = original_strela_r_x
                 strela_r_y = original_strela_r_y
                 strela_r_rychlost = 5
+                tank_r_invincibility = 11
 
     #tank_b
         if box_powerup_tank_b_sniper == True and box_powerup_tank_b_duration < 400:
@@ -644,6 +645,8 @@ while True:
                 strela_b_x = original_strela_b_x
                 strela_b_y = original_strela_b_y
                 strela_b_rychlost = 5
+                tank_b_invincibility = 11
+
 
     pygame.display.update() # prehozeni framebufferu na displej
 
