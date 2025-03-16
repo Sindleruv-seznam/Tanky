@@ -182,7 +182,7 @@ while True:
 
     # menu
     def menu():
-        button1 = pygame.Rect(poloha_x, (poloha_y - 100), velikost_x, velikost_y)
+        button1 = pygame.Rect(poloha_x, (poloha_y - 1500), velikost_x, velikost_y)
         pygame.draw.rect(okno, b_barva[0], button1)
         
         if button1.collidepoint(pozice_mysi):
@@ -190,14 +190,14 @@ while True:
         else:
             b_barva[0] = blue
 
-        #if button1.collidepoint(pozice_mysi) and LMB_active == True:
-        #    b_active[0] = True
+        if button1.collidepoint(pozice_mysi) and LMB_active == True:
+            b_active[0] = True
 
         text1 = font.render("Bossfight", True, grey)
         text1_rect = text1.get_rect(center=button1.center)
         okno.blit(text1, text1_rect)
 
-        button2 = pygame.Rect(poloha_x, (poloha_y), velikost_x, velikost_y)
+        button2 = pygame.Rect(poloha_x, (poloha_y - 50), velikost_x, velikost_y)
         pygame.draw.rect(okno, b_barva[1], button2)
         
         if button2.collidepoint(pozice_mysi):
@@ -212,7 +212,7 @@ while True:
         text2_rect = text2.get_rect(center=button2.center)
         okno.blit(text2, text2_rect)
 
-        button3 = pygame.Rect(poloha_x, (poloha_y + 100), velikost_x, velikost_y)
+        button3 = pygame.Rect(poloha_x, (poloha_y + 50), velikost_x, velikost_y)
         pygame.draw.rect(okno, b_barva[2], button3)
         
         if button3.collidepoint(pozice_mysi):
