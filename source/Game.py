@@ -308,14 +308,14 @@ while True:
                     ROZLISENI_OKNA_X -= 16
                     okno = pygame.display.set_mode((ROZLISENI_OKNA_X, ROZLISENI_OKNA_Y))
                     strela_r_1 = False
-                    strela_r_poloha[0] = 0
-                    strela_r_poloha[1] = 0
-                if strela_r_poloha[0] < 0:
+                    strela_r_poloha[0] = -100
+                    strela_r_poloha[1] = -100
+                if strela_r_poloha[0] < 0 and strela_r_poloha[0] > -50:
                     ROZLISENI_OKNA_X -= 16
                     okno = pygame.display.set_mode((ROZLISENI_OKNA_X, ROZLISENI_OKNA_Y))
                     strela_r_1 = False
-                    strela_r_poloha[0] = 0
-                    strela_r_poloha[1] = 0
+                    strela_r_poloha[0] = -100
+                    strela_r_poloha[1] = -100
             else:
                 if strela_r_poloha[0] > ROZLISENI_OKNA_X - strela_b_x:
                     strela_r_uhel = (180 - strela_r_uhel) % 360
@@ -327,14 +327,14 @@ while True:
                     ROZLISENI_OKNA_Y -= 9
                     okno = pygame.display.set_mode((ROZLISENI_OKNA_X, ROZLISENI_OKNA_Y))
                     strela_r_1 = False
-                    strela_r_poloha[0] = 0
-                    strela_r_poloha[1] = 0
-                if strela_r_poloha[1] < 0:
+                    strela_r_poloha[0] = -100
+                    strela_r_poloha[1] = -100
+                if strela_r_poloha[1] < 0 and strela_r_poloha[1] > -50:
                     ROZLISENI_OKNA_Y -= 9
                     okno = pygame.display.set_mode((ROZLISENI_OKNA_X, ROZLISENI_OKNA_Y))
                     strela_r_1 = False
-                    strela_r_poloha[0] = 0
-                    strela_r_poloha[1] = 0
+                    strela_r_poloha[0] = -100
+                    strela_r_poloha[1] = -100
             else:
                 if strela_r_poloha[1] > ROZLISENI_OKNA_Y - strela_r_y:
                     strela_r_uhel = (360 - strela_r_uhel) % 360
@@ -457,14 +457,14 @@ while True:
                     ROZLISENI_OKNA_X -= 16
                     okno = pygame.display.set_mode((ROZLISENI_OKNA_X, ROZLISENI_OKNA_Y))
                     strela_b_1 = False
-                    strela_b_poloha[0] = 0
-                    strela_b_poloha[1] = 0
-                if strela_b_poloha[0] < 0:
+                    strela_b_poloha[0] = -100
+                    strela_b_poloha[1] = -100
+                if strela_b_poloha[0] < 0 and strela_b_poloha[0] > -50:
                     ROZLISENI_OKNA_X -= 16
                     okno = pygame.display.set_mode((ROZLISENI_OKNA_X, ROZLISENI_OKNA_Y))
                     strela_b_1 = False
-                    strela_b_poloha[0] = 0
-                    strela_b_poloha[1] = 0
+                    strela_b_poloha[0] = -100
+                    strela_b_poloha[1] = -100
             else:
                 if strela_b_poloha[0] > ROZLISENI_OKNA_X - strela_b_x:
                     strela_b_uhel = (180 - strela_b_uhel) % 360
@@ -476,14 +476,14 @@ while True:
                     ROZLISENI_OKNA_Y -= 9
                     okno = pygame.display.set_mode((ROZLISENI_OKNA_X, ROZLISENI_OKNA_Y))
                     strela_b_1 = False
-                    strela_b_poloha[0] = 0
-                    strela_b_poloha[1] = 0
-                if strela_b_poloha[1] < 0:
+                    strela_b_poloha[0] = -100
+                    strela_b_poloha[1] = -100
+                if strela_b_poloha[1] < 0 and strela_b_poloha[1] > -50:
                     ROZLISENI_OKNA_Y -= 9
                     okno = pygame.display.set_mode((ROZLISENI_OKNA_X, ROZLISENI_OKNA_Y))
                     strela_b_1 = False
-                    strela_b_poloha[0] = 0
-                    strela_b_poloha[1] = 0
+                    strela_b_poloha[0] = -100
+                    strela_b_poloha[1] = -100
             else:
                 if strela_b_poloha[1] > ROZLISENI_OKNA_Y - strela_b_y:
                     strela_b_uhel = (360 - strela_b_uhel) % 360
